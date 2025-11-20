@@ -1,5 +1,6 @@
 package com.MangaPing.Model;
 
+import java.util.ArrayList;
 import java.util.List;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -14,22 +15,25 @@ import lombok.NoArgsConstructor;
 
 public class User {
 
-    @Id
-    private String email;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 
-    @Column (nullable = false)
-    private String username;
+	@Column(nullable = false, unique = true)
+	private String email;
 
-    @Column (nullable = false)
-    private String password;
+	@Column(nullable = false, unique = true)
+	private String username;
 
-    @ManyToMany
-    @JoinTable(
-        name = "user_anime", // Nombre de la tabla intermedia
-        joinColumns = @JoinColumn(name = "user_email", referencedColumnName = "email"),
-        inverseJoinColumns = @JoinColumn(name = "anime_id", referencedColumnName = "idAnime") // Llave foránea hacia Anime
-    )
-    private List<Anime> animes;
+	@Column(nullable = false)
+	private String password;
 
+	@ElementCollection
+	@CollectionTable(
+		name = "user_favorite_anime",
+		joinColumns = @JoinColumn(name = "user_id")
+	)
+	@Column(name = "anime_ids")
+	private List<Integer> animeIds = new ArrayList<>();
 
 }

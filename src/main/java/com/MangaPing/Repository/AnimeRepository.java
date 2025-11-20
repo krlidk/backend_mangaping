@@ -1,8 +1,0 @@
-package com.MangaPing.Repository;
-
-import com.MangaPing.Model.Anime;
-import org.springframework.data.jpa.repository.JpaRepository;
-
-public interface AnimeRepository extends JpaRepository<Anime, Integer> {
-    
-}
