@@ -21,6 +21,8 @@ target/
 ### Enviroment variables ###
 .env
 
+jsonTest/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/
