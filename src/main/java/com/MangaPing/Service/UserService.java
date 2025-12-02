@@ -37,9 +37,7 @@ public class UserService {
 			return ResponseEntity.badRequest().body("Debes rellenar todos los campos");
 		}
 
-		System.out.println("DEBUG LOGIN SERVICE: " + username + "password: " + password );
 		User loginUser = userRepository.findByUsername(username).orElse(null);
-		System.out.println("LOGIN USER: " + loginUser.getClass());
 
 		if (loginUser == null || !loginUser.getPassword().equals(password)) {
 			return ResponseEntity.badRequest().body("Usuario o contraseña incorrectos");

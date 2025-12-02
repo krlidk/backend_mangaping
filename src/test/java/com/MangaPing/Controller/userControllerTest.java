@@ -1,10 +1,8 @@
 package com.MangaPing.Controller;
 
 import org.junit.jupiter.api.Test;
-import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
@@ -12,9 +10,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.MangaPing.Model.User;
 import com.MangaPing.Service.UserService;
 
+import jakarta.servlet.http.HttpSession;
+
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 
 @WebMvcTest(controllers = userController.class)
 public class userControllerTest {
@@ -27,27 +29,40 @@ public class userControllerTest {
 
 	@Test
 	public void registerUser() throws Exception {
-		User usuario = new User();
-		User usuario2 = new User();
 
-		usuario.setId((long) 1);
-		usuario2.setId((long) 1);
+		when(userService.registerUser(any(User.class))).thenReturn(ResponseEntity.ok().build());
 
-		usuario.setUsername("usuario 1");
-		usuario2.setUsername("usuario 2");
+		mockMvc.perform(post("/api/v1/user/registerUser")
+				.contentType("application/json")
+				.accept("application/json")
+				.content("""  
+				{
+					
+				"username": "usuario1",
+				"password": "12345678",
+				"email": "usuario1@gmail.com"
+				}
+				""")).andExpect(status().isOk());
+	} 
+	@Test
+	public void login() throws Exception {
 
-		usuario.setPassword("12345678");
-		usuario2.setPassword("12345678");
-
-		usuario.setEmail("usuario1@pete.cl");
-		usuario2.setEmail("usuario2@pete.cl");
+		HttpSession session = null;
+		String username = "petiso";
+		String password = "12345678";
 
 
-		when(userService.registerUser(usuario)).thenReturn(ResponseEntity.ok().build());
+		when(userService.loginUser(username, password,session)).thenReturn(ResponseEntity.ok().build());
 
-		//mockMvc.perfom(get("/api/v1/user"))
-
-
-
+		mockMvc.perform(post("/api/v1/user/auth/login")
+				.contentType("application/json")
+				.accept("application/json")
+				.content("""  
+				{
+					
+				"username": "usuario1",
+				"password": "12345678"
+				}
+				""")).andExpect(status().isOk());
 	} 
 }
